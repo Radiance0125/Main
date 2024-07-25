@@ -4,8 +4,8 @@ root.title("testing")
 root.geometry("400x200")
 
 
-#1st approach
-photo = tk.PhotoImage(file = "image.jpg")
+label = tk.Label(root, text = "Testing", bg = "white", fg = "black")
+
 
 label.pack()
 root.mainloop()
