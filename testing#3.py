@@ -1,40 +1,63 @@
 import tkinter as tk 
+from tkinter import messagebox
 
-root = tk.Tk()
+class mygui:
 
-root.geometry("500x500")
+    def __init__(self):
+        
+        self.root = tk.Tk()
 
-root.title("my first gui")
+        self.menubar = tk.Menu(self.root)
 
-label = tk.Label(root, text = "testing", font = ("arial", 18))
-label.pack(padx = 20, pady = 20)
+        self.filemenu = tk.Menu (self.menubar, tearoff = 0)
+        self.filemenu.add_command(label = "close", command = self.on_closing)
+        self.filemenu.add_separator()
+        self.filemenu.add_command(label = "close without asking", command = exit)
 
-textbox = tk.Text(root, height = 3, font = ("arial", 16))
-textbox.pack(padx = 10, pady = 10)
+        self.actionmenu = tk.Menu(self.menubar, tearoff = 0)
+        self.actionmenu.add_command(label = "show message", command = self.show_message)
 
-buttonframe = tk.Frame(root)
-buttonframe.columnconfigure(0, weight = 1)
-buttonframe.columnconfigure(1, weight = 1)
-buttonframe.columnconfigure(2, weight = 1)
+        self.menubar.add_cascade(menu = self.filemenu, label = "file")
+        self.menubar.add_cascade(menu = self.actionmenu, label = "action")
 
-btn1 = tk.Button(buttonframe, text = "1", font = ("arial", 18))
-btn1.grid(row = 0, column = 0, sticky = tk.W + tk.E)
+        self.root.config(menu = self.menubar)
 
-btn2 = tk.Button(buttonframe, text = "2", font = ("arial", 18))
-btn2.grid(row = 0, column = 1, sticky = tk.W + tk.E)
+        self.label = tk.Label (self.root, text = "your message", font = ("arial", 18))
+        self.label.pack (padx = 10, pady = 10)
 
-btn3 = tk.Button(buttonframe, text = "3", font = ("arial", 18))
-btn3.grid(row = 0, column = 2, sticky = tk.W + tk.E)
+        self.textbox = tk.Text (self.root, height = 5, font = ("arial", 16))
+        self.textbox.bind("<KeyPress>", self.shortcut)
+        self.textbox.pack (padx = 10, pady = 10)
 
-btn4 = tk.Button(buttonframe, text = "4", font = ("arial", 18))
-btn4.grid(row = 1, column = 0, sticky = tk.W + tk.E)
+        self.check_state = tk.IntVar ()
 
-btn5 = tk.Button(buttonframe, text = "5", font = ("arial", 18))
-btn5.grid(row = 1, column = 1, sticky = tk.W + tk.E)
+        self.check = tk.Checkbutton (self.root, text = "show message box", font = ("arial", 16), variable = self.check_state)
+        self.check.pack (padx = 10, pady = 10)
+        
+        self.button = tk.Button (self.root, text = "show message", font = ("arial", 18), command = self.show_message)
+        self.button.pack (padx = 10, pady = 10)
 
-btn6 = tk.Button(buttonframe, text = "6", font = ("arial", 18))
-btn6.grid(row = 1, column = 2, sticky = tk.W + tk.E)
+        self.clearbtn = tk.Button (self.root, text = "clear", font = ("arial", 18), command = self.clear)
+        self.clearbtn.pack(padx = 10, pady = 10)
 
-buttonframe.pack(fill = "x")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.root.mainloop()
+    
+    def show_message(self):
+        if self.check_state.get() == 0:
+            print(self.textbox.get("1.0", tk.END))
+        else:
+            messagebox.showinfo (title = "message", message = self.textbox.get("1.0", tk.END))
 
-root.mainloop()
+    def shortcut(self, event):
+        if event.state == 12 and event.keysym == "Return":
+            self.show_message()
+    
+    def on_closing(self):
+        if messagebox.askyesno (title = "quit?", message = "do you really want to quit?"):
+            self.root.destroy()
+
+    def clear(self):
+        self.textbox.delete("1.0", tk.END)
+
+mygui()
