@@ -1,21 +1,18 @@
-import tkinter as tk
-from PIL import Image, ImageTk
+import tkinter as tk 
+
 root = tk.Tk()
-root.title("testing")
-root.geometry("400x400")
 
+root.geometry("500x500")
 
-#1st approach
-photo = tk.PhotoImage(file = "assets/image.png")
+root.title("my first gui")
 
-#2nd approach
-photo2 = Image.open("assets/image.png")
-resized_image = photo2.resize((400, 400), Image.BILINEAR)
-converted_image = ImageTk.PhotoImage(resized_image)
+label = tk.Label(root, text = "hello world", font = ("arial", 18))
+label.pack(padx = 20, pady = 20)
 
+textbox = tk.Text(root, height = 3, font = ("arial", 16))
+textbox.pack(padx = 10)
 
-label = tk.Label(root, image = converted_image, bg = "white", fg = "black")
+button = tk.Button(root, text = "click me!", font = ("arial", 18))
+button.pack()
 
-
-label.pack()
 root.mainloop()
