@@ -34,6 +34,8 @@ image2 : 960 x 640
 import tkinter as tk
 from PIL import Image, ImageTk
 
+import keypad
+
 
 def textbox(message):
     root = tk.Tk()
