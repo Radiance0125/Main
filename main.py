@@ -1,5 +1,6 @@
 #this is for the 24-25 open day
 #base story (credits to Leah):
+
 '''There was a reunion party in the mountains
 (It's near a town so the area isn't very secluded) and 
 they had a picnic. They were watching the sunset when 
@@ -19,7 +20,7 @@ laurence : victim
 veronica : friend (no role)
 katrina : friend (no role)
 nathan : friend (no role)
-police officer
+magnolius : police officer
 
 your role:
 detective
@@ -30,6 +31,7 @@ picture dimensions
 image1 : 780 x 780
 image2 : 960 x 640
 '''
+
 
 import tkinter as tk
 from PIL import Image, ImageTk
