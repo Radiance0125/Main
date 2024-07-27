@@ -34,7 +34,7 @@ image2 : 960 x 640
 import tkinter as tk
 from PIL import Image, ImageTk
 
-import keypad
+from keypad import keypad
 
 
 def textbox(message):
@@ -68,3 +68,5 @@ def image(imagenum, dimensionx, dimensiony):
 
 
 textbox("hello world")
+
+keypad()
