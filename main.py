@@ -69,6 +69,5 @@ def image(imagenum, dimensionx, dimensiony):
     root.mainloop()
 
 
-textbox("hello world")
 
 keypad()
