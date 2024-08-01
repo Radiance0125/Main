@@ -31,10 +31,8 @@ def keypad():
     buttonframe.columnconfigure(0, weight = 1)
     buttonframe.columnconfigure(1, weight = 1)
     buttonframe.columnconfigure(2, weight = 1)
-    buttonframe.rowconfigure(0, weight = 1)
-    buttonframe.rowconfigure(1, weight = 1)
-    buttonframe.rowconfigure(2, weight = 1)
-    buttonframe.rowconfigure(3, weight = 1)
+    for i in range(4):
+        buttonframe.rowconfigure(i, weight = 1)
 
     btn1 = tk.Button(buttonframe, text = "1", font = ("arial", 16), command = lambda x = "1" : add_to_display(x))
     btn1.grid(row = 0, column = 0, sticky = tk.W + tk.E)
