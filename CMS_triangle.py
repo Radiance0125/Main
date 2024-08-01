@@ -11,7 +11,18 @@ knownpercentage2 = []
 knownpercentage3 = []
 
 def fail():
-    
+    root  = tk.Tk()
+
+    root.geometry("300x150")
+
+    root.title("CMS calculator")
+               
+    label = tk.Label(root, text = "sorry, but the information is \n insufficient for this calculation", font = ("arial", 15))
+    label.pack(padx = 10, pady = 40)
+
+    root.mainloop()
+
+    exit()
 
 def addknownvalue(value, root):
     global known_values
@@ -183,6 +194,11 @@ def addknownpercentage(value, root):
     known_percentages.append(value)
     root.destroy()
 
+def insertknownpercentage(value, position, root):
+    global known_percentages
+    known_percentages.insert(position, value)
+    root.destroy()
+
 def firstpercentagechoice():
 
     global known_percentages
@@ -266,13 +282,15 @@ def secondpercentagechoice(x):
 
 def profitlossoption():
 
+    position = known_percentages.index("profit/loss")
+
     known_percentages.remove("profit/loss")
 
     root = tk.Tk()
 
     root.geometry("300x100")
 
-    root.title("CMS triangle calculator")
+    root.title("CMS calculator")
 
     label = tk.Label(root, font = ("arial", 15), text = "is there a profit or a loss?")
     label.pack(pady = 10)
@@ -281,15 +299,283 @@ def profitlossoption():
     buttonframe.columnconfigure(0, weight = 1)
     buttonframe.columnconfigure(1, weight = 1)
 
-    btn_profit = tk.Button(buttonframe, text = "profit", font = ("arial", 15), command = lambda x = "profit": addknownpercentage(x, root))
+    btn_profit = tk.Button(buttonframe, text = "profit", font = ("arial", 15), command = lambda x = "profit": insertknownpercentage(x, position, root))
     btn_profit.grid(row = 0, column = 0, sticky = tk.W + tk.E, padx = 3)
 
-    btn_profit = tk.Button(buttonframe, text = "loss", font = ("arial", 15), command = lambda x = "loss": addknownpercentage(x, root))
+    btn_profit = tk.Button(buttonframe, text = "loss", font = ("arial", 15), command = lambda x = "loss": insertknownpercentage(x, position, root))
     btn_profit.grid(row = 0, column = 1, sticky = tk.W + tk.E, padx = 3)
     
     buttonframe.pack(fill = "x")
 
     root.mainloop()
+
+def findvalue (value, info):
+    def add_to_display(value):
+        display.configure(state="normal")
+        display.insert(tk.END, value)
+        display.configure(state="readonly")
+
+    def clear_display():
+        display.configure(state="normal")
+        display.delete(0, tk.END)
+        display.configure(state="readonly")
+    
+    def submit_code():
+        if display.get() != "":
+            code = display.get()
+            info.append(int(code))
+            root.destroy()
+
+    root = tk.Tk()
+
+    root.geometry("245x250")
+
+    root.title("CMS calculator")
+
+    if value == "C":
+        label = tk.Label(root, text = "what is the cost price?", font = ("arial", 16))
+    if value == "M":
+        label = tk.Label(root, text = "what is the marked price?", font = ("arial", 16))
+    if value == "S":
+        label = tk.Label(root, text = "what is the selling price?", font = ("arial", 16))
+    label.pack(pady = 10)
+
+    display = tk.Entry(root, font = ("arial", 20), state = "readonly")
+    display.pack(padx = 10, pady = 3)
+
+    buttonframe = tk.Frame(root)
+    buttonframe.columnconfigure(0, weight = 1)
+    buttonframe.columnconfigure(1, weight = 1)
+    buttonframe.columnconfigure(2, weight = 1)
+    buttonframe.rowconfigure(0, weight = 1)
+    buttonframe.rowconfigure(1, weight = 1)
+    buttonframe.rowconfigure(2, weight = 1)
+    buttonframe.rowconfigure(3, weight = 1)
+
+    btn1 = tk.Button(buttonframe, text = "1", font = ("arial", 16), command = lambda x = "1" : add_to_display(x))
+    btn1.grid(row = 0, column = 0, sticky = tk.W + tk.E)
+
+    btn2 = tk.Button(buttonframe, text = "2", font = ("arial", 16), command = lambda x = "2" : add_to_display(x))
+    btn2.grid(row = 0, column = 1, sticky = tk.W + tk.E)
+
+    btn3 = tk.Button(buttonframe, text = "3", font = ("arial", 16), command = lambda x = "3" : add_to_display(x))
+    btn3.grid(row = 0, column = 2, sticky = tk.W + tk.E)
+
+    btn4 = tk.Button(buttonframe, text = "4", font = ("arial", 16), command = lambda x = "4" : add_to_display(x))
+    btn4.grid(row = 1, column = 0, sticky = tk.W + tk.E)
+
+    btn5 = tk.Button(buttonframe, text = "5", font = ("arial", 16), command = lambda x = "5" : add_to_display(x))
+    btn5.grid(row = 1, column = 1, sticky = tk.W + tk.E)
+
+    btn6 = tk.Button(buttonframe, text = "6", font = ("arial", 16), command = lambda x = "6" : add_to_display(x))
+    btn6.grid(row = 1, column = 2, sticky = tk.W + tk.E)
+
+    btn7 = tk.Button(buttonframe, text = "7", font = ("arial", 16), command = lambda x = "7" : add_to_display(x))
+    btn7.grid(row = 2, column = 0, sticky = tk.W + tk.E)
+
+    btn8 = tk.Button(buttonframe, text = "8", font = ("arial", 16), command = lambda x = "8" : add_to_display(x))
+    btn8.grid(row = 2, column = 1, sticky = tk.W + tk.E)
+
+    btn9 = tk.Button(buttonframe, text = "9", font = ("arial", 16), command = lambda x = "9" : add_to_display(x))
+    btn9.grid(row = 2, column = 2, sticky = tk.W + tk.E)
+
+    clrbtn = tk.Button(buttonframe, text = "clear", font = ("arial", 16), command = clear_display)
+    clrbtn.place(x = 0, y =119, height = 39, width = 81)
+
+    btn0 = tk.Button(buttonframe, text = "0", font = ("arial", 16), command = lambda x = "0" : add_to_display(x))
+    btn0.grid(row = 3, column = 1, sticky = tk.W + tk.E)
+
+    entrbtn = tk.Button(buttonframe, text = "enter", font = ("arial", 16), command = lambda : submit_code())
+    entrbtn.place(x = 164, y = 119, height = 39, width = 81)
+
+    buttonframe.pack(fill = "x")
+
+    root.mainloop()
+
+def findnumber(value, info, prevpage):
+
+    prevpage.destroy()
+    
+    def add_to_display(value):
+        display.configure(state="normal")
+        display.insert(tk.END, value)
+        display.configure(state="readonly")
+
+    def clear_display():
+        display.configure(state="normal")
+        display.delete(0, tk.END)
+        display.configure(state="readonly")
+    
+    def submit_code():
+        code = display.get()
+        info.append(int(code))
+        info.append("number")
+        root.destroy()
+
+    root = tk.Tk()
+
+    root.geometry("200x260")
+
+    root.title("CMS calculator")
+
+    label = tk.Label(root, text = "what is the " + value + "?", font = ("arial", 14))
+    label.pack()
+
+    display = tk.Entry(root, font = ("arial", 20), state = "readonly")
+    display.pack(padx = 10, pady = 3)
+
+    buttonframe = tk.Frame(root)
+    buttonframe.columnconfigure(0, weight = 1)
+    buttonframe.columnconfigure(1, weight = 1)
+    buttonframe.columnconfigure(2, weight = 1)
+    for i in range(4):
+        buttonframe.rowconfigure(i, weight = 1)
+
+    btn1 = tk.Button(buttonframe, text = "1", font = ("arial", 16), command = lambda x = "1" : add_to_display(x))
+    btn1.grid(row = 0, column = 0, sticky = tk.W + tk.E)
+
+    btn2 = tk.Button(buttonframe, text = "2", font = ("arial", 16), command = lambda x = "2" : add_to_display(x))
+    btn2.grid(row = 0, column = 1, sticky = tk.W + tk.E)
+
+    btn3 = tk.Button(buttonframe, text = "3", font = ("arial", 16), command = lambda x = "3" : add_to_display(x))
+    btn3.grid(row = 0, column = 2, sticky = tk.W + tk.E)
+
+    btn4 = tk.Button(buttonframe, text = "4", font = ("arial", 16), command = lambda x = "4" : add_to_display(x))
+    btn4.grid(row = 1, column = 0, sticky = tk.W + tk.E)
+
+    btn5 = tk.Button(buttonframe, text = "5", font = ("arial", 16), command = lambda x = "5" : add_to_display(x))
+    btn5.grid(row = 1, column = 1, sticky = tk.W + tk.E)
+
+    btn6 = tk.Button(buttonframe, text = "6", font = ("arial", 16), command = lambda x = "6" : add_to_display(x))
+    btn6.grid(row = 1, column = 2, sticky = tk.W + tk.E)
+
+    btn7 = tk.Button(buttonframe, text = "7", font = ("arial", 16), command = lambda x = "7" : add_to_display(x))
+    btn7.grid(row = 2, column = 0, sticky = tk.W + tk.E)
+
+    btn8 = tk.Button(buttonframe, text = "8", font = ("arial", 16), command = lambda x = "8" : add_to_display(x))
+    btn8.grid(row = 2, column = 1, sticky = tk.W + tk.E)
+
+    btn9 = tk.Button(buttonframe, text = "9", font = ("arial", 16), command = lambda x = "9" : add_to_display(x))
+    btn9.grid(row = 2, column = 2, sticky = tk.W + tk.E)
+
+    clrbtn = tk.Button(buttonframe, text = "clear", font = ("arial", 16), command = clear_display)
+    clrbtn.place(x = 0, y = 126, height = 42, width = 66)
+
+    btn0 = tk.Button(buttonframe, text = "0", font = ("arial", 16), command = lambda x = "0" : add_to_display(x))
+    btn0.grid(row = 3, column = 1, sticky = tk.W + tk.E)
+
+    entrbtn = tk.Button(buttonframe, text = "enter", font = ("arial", 16), command = lambda : submit_code())
+    entrbtn.place(x = 134, y = 126, height = 42, width = 66)
+
+    buttonframe.pack(fill = "x")
+
+    root.mainloop()
+
+def findpercentage(value, info, prevpage):
+
+    prevpage.destroy()
+
+    def add_to_display(value):
+        display.configure(state="normal")
+        display.insert(tk.END, value)
+        display.configure(state="readonly")
+
+    def clear_display():
+        display.configure(state="normal")
+        display.delete(0, tk.END)
+        display.configure(state="readonly")
+    
+    def submit_code():
+        code = display.get()
+        info.append(int(code))
+        info.append("percentage")
+        root.destroy()
+
+    root = tk.Tk()
+
+    root.geometry("200x260")
+
+    root.title("CMS calculator")
+
+    label = tk.Label(root, text = "what is the " + value + "%?", font = ("arial", 14))
+    label.pack()
+
+    display = tk.Entry(root, font = ("arial", 20), state = "readonly")
+    display.pack(padx = 10, pady = 3)
+
+    buttonframe = tk.Frame(root)
+    buttonframe.columnconfigure(0, weight = 1)
+    buttonframe.columnconfigure(1, weight = 1)
+    buttonframe.columnconfigure(2, weight = 1)
+    for i in range(4):
+        buttonframe.rowconfigure(i, weight = 1)
+
+    btn1 = tk.Button(buttonframe, text = "1", font = ("arial", 16), command = lambda x = "1" : add_to_display(x))
+    btn1.grid(row = 0, column = 0, sticky = tk.W + tk.E)
+
+    btn2 = tk.Button(buttonframe, text = "2", font = ("arial", 16), command = lambda x = "2" : add_to_display(x))
+    btn2.grid(row = 0, column = 1, sticky = tk.W + tk.E)
+
+    btn3 = tk.Button(buttonframe, text = "3", font = ("arial", 16), command = lambda x = "3" : add_to_display(x))
+    btn3.grid(row = 0, column = 2, sticky = tk.W + tk.E)
+
+    btn4 = tk.Button(buttonframe, text = "4", font = ("arial", 16), command = lambda x = "4" : add_to_display(x))
+    btn4.grid(row = 1, column = 0, sticky = tk.W + tk.E)
+
+    btn5 = tk.Button(buttonframe, text = "5", font = ("arial", 16), command = lambda x = "5" : add_to_display(x))
+    btn5.grid(row = 1, column = 1, sticky = tk.W + tk.E)
+
+    btn6 = tk.Button(buttonframe, text = "6", font = ("arial", 16), command = lambda x = "6" : add_to_display(x))
+    btn6.grid(row = 1, column = 2, sticky = tk.W + tk.E)
+
+    btn7 = tk.Button(buttonframe, text = "7", font = ("arial", 16), command = lambda x = "7" : add_to_display(x))
+    btn7.grid(row = 2, column = 0, sticky = tk.W + tk.E)
+
+    btn8 = tk.Button(buttonframe, text = "8", font = ("arial", 16), command = lambda x = "8" : add_to_display(x))
+    btn8.grid(row = 2, column = 1, sticky = tk.W + tk.E)
+
+    btn9 = tk.Button(buttonframe, text = "9", font = ("arial", 16), command = lambda x = "9" : add_to_display(x))
+    btn9.grid(row = 2, column = 2, sticky = tk.W + tk.E)
+
+    clrbtn = tk.Button(buttonframe, text = "clear", font = ("arial", 16), command = clear_display)
+    clrbtn.place(x = 0, y = 126, height = 42, width = 66)
+
+    btn0 = tk.Button(buttonframe, text = "0", font = ("arial", 16), command = lambda x = "0" : add_to_display(x))
+    btn0.grid(row = 3, column = 1, sticky = tk.W + tk.E)
+
+    entrbtn = tk.Button(buttonframe, text = "enter", font = ("arial", 16), command = lambda : submit_code())
+    entrbtn.place(x = 134, y = 126, height = 42, width = 66)
+
+    buttonframe.pack(fill = "x")
+
+    root.mainloop()
+
+def numberorpercentage(value, info):
+
+    root = tk.Tk()
+
+    root.geometry("400x200")
+
+    root.title("CMS calculator")
+
+    label = tk.Label(root, text = "is the known " + value + "\nin the form of a percentage or a number?", font = ("arial", 14))
+    label.pack()
+
+    buttonframe = tk.Frame(root)
+
+    buttonframe.columnconfigure(0, weight = 1)
+    buttonframe.columnconfigure(1, weight = 1)
+
+    btn_num = tk.Button(buttonframe, text = "number", font = ("arial", 15), command = lambda x = value : findnumber(x, info, root))
+    btn_num.grid(row = 0, column  = 0, sticky = tk.W + tk.E, pady = 3)
+
+    btn_perc = tk.Button(buttonframe, text = "percentage", font = ("arial", 15), command = lambda x = value : findpercentage(x, info, root))
+    btn_perc.grid(row = 0, column  = 1, sticky = tk.W + tk.E, pady = 3)
+
+    buttonframe.pack(fill = "x")
+
+    root.mainloop()
+
 
 
 #see if any of the values are known
@@ -297,7 +583,6 @@ firstvaluechoice()
 
 if known_values [0] == "none":
     fail()
-    exit()
 
 knownvalue1 = [known_values[0]]
 
@@ -320,6 +605,9 @@ if known_values[0] != "none":
 #see how many percentages are known
 firstpercentagechoice()
 
+if known_percentages[0] == "none":
+    fail()
+
 #see if any other ones are known
 if known_percentages[0] == "all":
     known_percentages.pop()
@@ -328,15 +616,21 @@ if known_percentages[0] == "all":
     known_percentages.append("profit/loss")
 elif known_percentages[0] != "none":
     secondpercentagechoice(known_percentages[0])
+    known_percentages.append("none")
 
 #clarify if it's profit or loss if its known
 if "profit/loss" in known_percentages:
     profitlossoption()
 
+print(known_percentages)
+
 #seperating the percentages into their individual lists for later use
-if len(known_percentages) > 0:
-    knownpercentage1.append(known_percentages[0])
-    if len(known_percentages) > 1:
-        knownpercentage2.append(known_percentages[1])
-        if len(known_percentages) > 2:
-            knownpercentage3.append(known_percentages[2])
+knownpercentage1.append(known_percentages[0])
+numberorpercentage(knownpercentage1[0], knownpercentage1)
+if known_percentages[1] != "none":
+    knownpercentage2.append(known_percentages[1])
+    numberorpercentage(knownpercentage2[0], knownpercentage2)
+    if known_percentages[2] != "none":
+        knownpercentage3.append(known_percentages[2])
+        numberorpercentage(knownpercentage3[0], knownpercentage3)
+
