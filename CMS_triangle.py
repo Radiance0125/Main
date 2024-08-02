@@ -641,6 +641,8 @@ if knownvalue2 == "none" and knownpercentage2 == "none":
 
 #the input part has ended
 
+profitloss = "none"
+
 dictofcomponents = {
     "S" : "none", 
     "M" : "none", 
@@ -672,9 +674,11 @@ for i in (knownpercentage1, knownpercentage2, knownpercentage3):
         if i[0] == "profit":
             dictofcomponents.pop("loss")
             dictofcomponents.pop("loss%")
+            profitloss = "profit"
         if i[0] == "loss":
             dictofcomponents.pop("profit")
             dictofcomponents.pop("profit%")
+            profitloss = "loss"
 
         x = ""
 
@@ -682,4 +686,21 @@ for i in (knownpercentage1, knownpercentage2, knownpercentage3):
             x = "%"
         
     changedict(i[0] + x, i[1])
+
+if dictofcomponents.get("C") != "none" and dictofcomponents.get("M") != "none":
+    changedict("markup", dictofcomponents.get("M") - dictofcomponents.get("C"))
+    changedict("markup%", (dictofcomponents.get("M") - dictofcomponents.get("C"))/dictofcomponents.get("M"))
+
+if dictofcomponents.get("M") != "none" and dictofcomponents.get("S") != "none":
+    changedict("discount", dictofcomponents.get("M") - dictofcomponents.get("S"))
+    changedict("discount%", (dictofcomponents.get("M") - dictofcomponents.get("S"))/dictofcomponents.get("M"))
+
+if profitloss == "loss" or profitloss == "none":
+    if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
+        changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
+        changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
+else:
+    if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
+        changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
+        changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
 
