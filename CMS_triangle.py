@@ -1,5 +1,7 @@
 import tkinter as tk 
 
+firstcount = 0
+
 known_values = []
 known_percentages = []
 
@@ -633,4 +635,51 @@ if known_percentages[1] != "none":
     if known_percentages[2] != "none":
         knownpercentage3.append(known_percentages[2])
         numberorpercentage(knownpercentage3[0], knownpercentage3)
+
+if knownvalue2 == "none" and knownpercentage2 == "none":
+    fail()
+
+#the input part has ended
+
+dictofcomponents = {
+    "S" : "none", 
+    "M" : "none", 
+    "C" : "none", 
+    "markup" : "none", 
+    "discount" : "none", 
+    "profit" : "none", 
+    "loss" : "none", 
+    "markup%" : "none", 
+    "discount%" : "none", 
+    "profit%" : "none", 
+    "loss%" : "none"
+}
+
+def changedict(object, value):
+    dictofcomponents.update({object : value})
+
+changedict(knownvalue1[0], knownvalue1[1])
+if knownvalue2[0] == "none":
+    pass
+else:
+    changedict(knownvalue2[0], knownvalue2[1])
+
+for i in (knownpercentage1, knownpercentage2, knownpercentage3):
+
+    if i == "none":
+        pass
+    else:
+        if i[0] == "profit":
+            dictofcomponents.pop("loss")
+            dictofcomponents.pop("loss%")
+        if i[0] == "loss":
+            dictofcomponents.pop("profit")
+            dictofcomponents.pop("profit%")
+
+        x = ""
+
+        if i[2] == "percentage":
+            x = "%"
+        
+    changedict(i[0] + x, i[1])
 
