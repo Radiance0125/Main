@@ -1,7 +1,5 @@
 import tkinter as tk 
 
-firstcount = 0
-
 known_values = []
 known_percentages = []
 
@@ -18,7 +16,7 @@ def fail():
     root.geometry("300x150")
 
     root.title("CMS calculator")
-               
+
     label = tk.Label(root, text = "sorry, but the information is \n insufficient for this calculation", font = ("arial", 15))
     label.pack(padx = 10, pady = 40)
 
@@ -304,8 +302,8 @@ def profitlossoption():
     btn_profit = tk.Button(buttonframe, text = "profit", font = ("arial", 15), command = lambda x = "profit": insertknownpercentage(x, position, root))
     btn_profit.grid(row = 0, column = 0, sticky = tk.W + tk.E, padx = 3)
 
-    btn_profit = tk.Button(buttonframe, text = "loss", font = ("arial", 15), command = lambda x = "loss": insertknownpercentage(x, position, root))
-    btn_profit.grid(row = 0, column = 1, sticky = tk.W + tk.E, padx = 3)
+    btn_loss = tk.Button(buttonframe, text = "loss", font = ("arial", 15), command = lambda x = "loss": insertknownpercentage(x, position, root))
+    btn_loss.grid(row = 0, column = 1, sticky = tk.W + tk.E, padx = 3)
     
     buttonframe.pack(fill = "x")
 
@@ -687,20 +685,83 @@ for i in (knownpercentage1, knownpercentage2, knownpercentage3):
         
     changedict(i[0] + x, i[1])
 
-if dictofcomponents.get("C") != "none" and dictofcomponents.get("M") != "none":
-    changedict("markup", dictofcomponents.get("M") - dictofcomponents.get("C"))
-    changedict("markup%", (dictofcomponents.get("M") - dictofcomponents.get("C"))/dictofcomponents.get("M"))
+def crossreference():
+    #use the known values to figure out the percentages
+    if dictofcomponents.get("C") != "none" and dictofcomponents.get("M") != "none":
+        changedict("markup", dictofcomponents.get("M") - dictofcomponents.get("C"))
+        changedict("markup%", (dictofcomponents.get("M") - dictofcomponents.get("C"))/dictofcomponents.get("M"))
 
-if dictofcomponents.get("M") != "none" and dictofcomponents.get("S") != "none":
-    changedict("discount", dictofcomponents.get("M") - dictofcomponents.get("S"))
-    changedict("discount%", (dictofcomponents.get("M") - dictofcomponents.get("S"))/dictofcomponents.get("M"))
+    if dictofcomponents.get("M") != "none" and dictofcomponents.get("S") != "none":
+        changedict("discount", dictofcomponents.get("M") - dictofcomponents.get("S"))
+        changedict("discount%", (dictofcomponents.get("M") - dictofcomponents.get("S"))/dictofcomponents.get("M"))
 
-if profitloss == "loss" or profitloss == "none":
-    if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
-        changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
-        changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
-else:
-    if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
-        changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
-        changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
+    if profitloss == "loss" or profitloss == "none":
+        if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
+            changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
+            changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
+    elif dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
+            changedict("profit", dictofcomponents.get("S") - dictofcomponents.get("C"))
+            changedict("profit%", (dictofcomponents.get("S") - dictofcomponents.get("C"))/dictofcomponents.get("S"))
 
+    #use the known percantages to figure out the values
+    if dictofcomponents.get("markup") != "none":
+        if dictofcomponents.get("C") != "none":
+            changedict("M", dictofcomponents.get("C") + dictofcomponents.get("markup"))
+        elif dictofcomponents.get("M") != "none":
+            changedict("C", dictofcomponents.get("M") - dictofcomponents.get("markup"))
+
+    if dictofcomponents.get("markup%") != "none":
+        if dictofcomponents.get("C") != "none":
+            changedict("M", dictofcomponents.get("C")*(1+dictofcomponents.get("markup%")))
+        elif dictofcomponents.get("M") != "none":
+            changedict("C", dictofcomponents.get("M")/(1+dictofcomponents.get("markup%")))
+
+    if dictofcomponents.get("discount") != "none":
+        if dictofcomponents.get("M") != "none":
+            changedict("S", dictofcomponents.get("M") - dictofcomponents.get("discount"))
+        elif dictofcomponents.get("S") != "none":
+            changedict("M", dictofcomponents.get("S") + dictofcomponents.get("discount"))
+
+    if dictofcomponents.get("discount%") != "none":
+        if dictofcomponents.get("M") != "none":
+            changedict("S", dictofcomponents.get("M")*(1-dictofcomponents.get("discount%")))
+        elif dictofcomponents.get("S") != "none":
+            changedict("M", dictofcomponents.get("S")/(1-dictofcomponents.get("discount%")))
+
+    if profitloss == "profit":
+        if dictofcomponents.get("profit") != "none":
+            if dictofcomponents.get("C") != "none":
+                changedict("S", dictofcomponents.get("C") + dictofcomponents.get("profit"))
+            elif dictofcomponents.get("S") != "none":
+                changedict("C", dictofcomponents.get("S") + dictofcomponents.get("profit"))
+            
+        if dictofcomponents.get("profit%") != "none":
+            if dictofcomponents.get("C") != "none":
+                changedict("S", dictofcomponents.get("C")*(1+dictofcomponents.get("profit%")))
+            elif dictofcomponents.get("S") != "none":
+                changedict("C", dictofcomponents.get("S")/(1+dictofcomponents.get("profit%")))
+
+    elif profitloss == "loss":
+        if dictofcomponents.get("loss") != "none":
+            if dictofcomponents.get("C") != "none":
+                changedict("S", dictofcomponents.get("C") - dictofcomponents.get("loss"))
+            elif dictofcomponents.get("S") != "none":
+                changedict("C", dictofcomponents.get("S") + dictofcomponents.get("loss"))
+
+        if dictofcomponents.get("loss%") != "none":
+            if dictofcomponents.get("C") != "none":
+                changedict("S", dictofcomponents.get("C")*(1-dictofcomponents.get("loss%")))
+            elif dictofcomponents.get("S") != "none":
+                changedict("C", dictofcomponents.get("S")/(1-dictofcomponents.get("loss%")))
+
+
+#complete the rest of the table
+crossreference()
+#use the newly aquired info to do it again
+crossreference()
+
+def showresults():
+    
+    root = tk.Tk()
+
+    root.geometry("")
