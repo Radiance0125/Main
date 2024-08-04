@@ -10,6 +10,8 @@ knownpercentage1 = []
 knownpercentage2 = []
 knownpercentage3 = []
 
+unregisteredperecntages = []
+
 def fail():
     root  = tk.Tk()
 
@@ -622,8 +624,6 @@ elif known_percentages[0] != "none":
 if "profit/loss" in known_percentages:
     profitlossoption()
 
-print(known_percentages)
-
 #seperating the percentages into their individual lists for later use
 knownpercentage1.append(known_percentages[0])
 numberorpercentage(knownpercentage1[0], knownpercentage1)
@@ -669,39 +669,42 @@ for i in (knownpercentage1, knownpercentage2, knownpercentage3):
     if i == "none":
         pass
     else:
-        if i[0] == "profit":
+        if "profit" in i:
             dictofcomponents.pop("loss")
             dictofcomponents.pop("loss%")
             profitloss = "profit"
-        if i[0] == "loss":
+        if "loss" in i:
             dictofcomponents.pop("profit")
             dictofcomponents.pop("profit%")
             profitloss = "loss"
 
         x = ""
 
-        if i[2] == "percentage":
+        if "percentage" in i:
             x = "%"
-        
-    changedict(i[0] + x, i[1])
+    if len(i) != 0:
+        changedict(i[0] + x, i[1])
+
+print (dictofcomponents)
 
 def crossreference():
     #use the known values to figure out the percentages
     if dictofcomponents.get("C") != "none" and dictofcomponents.get("M") != "none":
         changedict("markup", dictofcomponents.get("M") - dictofcomponents.get("C"))
-        changedict("markup%", (dictofcomponents.get("M") - dictofcomponents.get("C"))/dictofcomponents.get("M"))
+        changedict("markup%", ((dictofcomponents.get("M") - dictofcomponents.get("C"))/dictofcomponents.get("C"))*100)
 
     if dictofcomponents.get("M") != "none" and dictofcomponents.get("S") != "none":
         changedict("discount", dictofcomponents.get("M") - dictofcomponents.get("S"))
-        changedict("discount%", (dictofcomponents.get("M") - dictofcomponents.get("S"))/dictofcomponents.get("M"))
+        changedict("discount%", ((dictofcomponents.get("M") - dictofcomponents.get("S"))/dictofcomponents.get("M"))*100)
 
     if profitloss == "loss" or profitloss == "none":
         if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
             changedict("loss", dictofcomponents.get("C") - dictofcomponents.get("S"))
-            changedict("loss%", (dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))
-    elif dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
+            changedict("loss%", ((dictofcomponents.get("C") - dictofcomponents.get("S"))/dictofcomponents.get("C"))*100)
+    if profitloss == "profit" or profitloss == "none":
+        if dictofcomponents.get("C") != "none" and dictofcomponents.get("S") != "none":
             changedict("profit", dictofcomponents.get("S") - dictofcomponents.get("C"))
-            changedict("profit%", (dictofcomponents.get("S") - dictofcomponents.get("C"))/dictofcomponents.get("S"))
+            changedict("profit%", ((dictofcomponents.get("S") - dictofcomponents.get("C"))/dictofcomponents.get("C"))*100)
 
     #use the known percantages to figure out the values
     if dictofcomponents.get("markup") != "none":
@@ -712,9 +715,9 @@ def crossreference():
 
     if dictofcomponents.get("markup%") != "none":
         if dictofcomponents.get("C") != "none":
-            changedict("M", dictofcomponents.get("C")*(1+dictofcomponents.get("markup%")))
+            changedict("M", dictofcomponents.get("C")*(1+dictofcomponents.get("markup%")*0.01))
         elif dictofcomponents.get("M") != "none":
-            changedict("C", dictofcomponents.get("M")/(1+dictofcomponents.get("markup%")))
+            changedict("C", dictofcomponents.get("M")/(1+dictofcomponents.get("markup%")*0.01))
 
     if dictofcomponents.get("discount") != "none":
         if dictofcomponents.get("M") != "none":
@@ -724,9 +727,9 @@ def crossreference():
 
     if dictofcomponents.get("discount%") != "none":
         if dictofcomponents.get("M") != "none":
-            changedict("S", dictofcomponents.get("M")*(1-dictofcomponents.get("discount%")))
+            changedict("S", dictofcomponents.get("M")*(1-dictofcomponents.get("discount%")*0.01))
         elif dictofcomponents.get("S") != "none":
-            changedict("M", dictofcomponents.get("S")/(1-dictofcomponents.get("discount%")))
+            changedict("M", dictofcomponents.get("S")/(1-dictofcomponents.get("discount%")*0.01))
 
     if profitloss == "profit":
         if dictofcomponents.get("profit") != "none":
@@ -737,9 +740,9 @@ def crossreference():
             
         if dictofcomponents.get("profit%") != "none":
             if dictofcomponents.get("C") != "none":
-                changedict("S", dictofcomponents.get("C")*(1+dictofcomponents.get("profit%")))
+                changedict("S", dictofcomponents.get("C")*(1+dictofcomponents.get("profit%")*0.01))
             elif dictofcomponents.get("S") != "none":
-                changedict("C", dictofcomponents.get("S")/(1+dictofcomponents.get("profit%")))
+                changedict("C", dictofcomponents.get("S")/(1+dictofcomponents.get("profit%")*0.01))
 
     elif profitloss == "loss":
         if dictofcomponents.get("loss") != "none":
@@ -750,9 +753,9 @@ def crossreference():
 
         if dictofcomponents.get("loss%") != "none":
             if dictofcomponents.get("C") != "none":
-                changedict("S", dictofcomponents.get("C")*(1-dictofcomponents.get("loss%")))
+                changedict("S", dictofcomponents.get("C")*(1-dictofcomponents.get("loss%")*0.01))
             elif dictofcomponents.get("S") != "none":
-                changedict("C", dictofcomponents.get("S")/(1-dictofcomponents.get("loss%")))
+                changedict("C", dictofcomponents.get("S")/(1-dictofcomponents.get("loss%")*0.01))
 
 
 #complete the rest of the table
@@ -760,8 +763,67 @@ crossreference()
 #use the newly aquired info to do it again
 crossreference()
 
+#some cases in which the profit/loss isn't already known, this is needed to find out which one is needed
+if dictofcomponents.get("S") > dictofcomponents.get("C"):
+    dictofcomponents.pop("loss")
+    dictofcomponents.pop("loss%")
+    profitloss = "profit"
+elif dictofcomponents.get("S") < dictofcomponents.get("C"):
+    dictofcomponents.pop("profit")
+    dictofcomponents.pop("profit%")
+    profitloss = "loss"
+
 def showresults():
     
     root = tk.Tk()
 
-    root.geometry("")
+    root.geometry("800x90")
+
+    root.title("CMS calculator")
+
+    labelframe = tk.Frame(root)
+
+    labelframe.columnconfigure(0, weight = 1)
+    labelframe.columnconfigure(1, weight = 1)
+    labelframe.columnconfigure(2, weight = 1)
+
+    cost_label = tk.Label(labelframe, text = "cost price = $" + str(dictofcomponents.get("C")), font = ("arial", 12))
+    cost_label.grid(row = 0, column = 0, padx = 3, pady = 3)
+
+    marked_label = tk.Label(labelframe, text = "marked price = $" + str(dictofcomponents.get("M")), font = ("arial", 12))
+    marked_label.grid(row = 0, column = 1, padx = 3, pady = 3)
+
+    selling_label = tk.Label(labelframe, text = "selling price = $" + str(dictofcomponents.get("S")), font = ("arial", 12))
+    selling_label.grid(row = 0, column = 2, padx = 3, pady = 3)
+
+    markup_label = tk.Label(labelframe, text = "markup = $" + str(dictofcomponents.get("markup")), font = ("arial", 12))
+    markup_label.grid(row = 1, column = 0, padx = 3, pady = 3)
+
+    discount_label = tk.Label(labelframe, text = "discount = $" + str(dictofcomponents.get("discount")), font = ("arial", 12))
+    discount_label.grid(row = 1, column = 1, padx = 3, pady = 3)
+    
+    if profitloss == "profit":
+        profit_label = tk.Label(labelframe, text = "profit = $" + str(dictofcomponents.get("profit")), font = ("arial", 12))
+        profit_label.grid(row = 1, column = 2, padx = 3, pady = 3)
+    elif profitloss == "loss":
+        loss_label = tk.Label(labelframe, text = "loss = $" + str(dictofcomponents.get("loss")), font = ("arial", 12))
+        loss_label.grid(row = 1, column = 2, padx = 3, pady = 3)
+
+    markupperc_label = tk.Label(labelframe, text = "markup% = " + str(dictofcomponents.get("markup%")), font = ("arial", 12))
+    markupperc_label.grid(row = 2, column = 0, padx = 3, pady = 3)
+
+    discountperc_label = tk.Label(labelframe, text = "discount% = " + str(dictofcomponents.get("discount%")), font = ("arial", 12))
+    discountperc_label.grid(row = 2, column = 1, padx = 3, pady = 3)
+    
+    if profitloss == "profit":
+        profitperc_label = tk.Label(labelframe, text = "profit% = " + str(dictofcomponents.get("profit%")), font = ("arial", 12))
+        profitperc_label.grid(row = 2, column = 2, padx = 3, pady = 3)
+    elif profitloss == "loss":
+        lossperc_label = tk.Label(labelframe, text = "loss% = " + str(dictofcomponents.get("loss%")), font = ("arial", 12))
+        lossperc_label.grid(row = 2, column = 2, padx = 3, pady = 3)
+
+    labelframe.pack(fill = "x")
+
+    root.mainloop()
+
+showresults()
