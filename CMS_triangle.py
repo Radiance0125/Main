@@ -764,4 +764,51 @@ def showresults():
     
     root = tk.Tk()
 
-    root.geometry("")
+    root.geometry("500x90")
+
+    root.title("CMS calculator")
+
+    labelframe = tk.Frame(root)
+
+    labelframe.columnconfigure(0, weight = 1)
+    labelframe.columnconfigure(1, weight = 1)
+    labelframe.columnconfigure(2, weight = 1)
+
+    cost_label = tk.Label(labelframe, text = "cost price = $" + dictofcomponents.get("C"), font = ("arial", 12))
+    cost_label.pack(row = 0, column = 0, padx = 3, pady = 3)
+
+    marked_label = tk.Label(labelframe, text = "marked price = $" + dictofcomponents.get("M"), font = ("arial", 12))
+    marked_label.pack(row = 0, column = 1, padx = 3, pady = 3)
+
+    selling_label = tk.Label(labelframe, text = "selling price = $" + dictofcomponents.get("S"), font = ("arial", 12))
+    selling_label.pack(row = 0, column = 2, padx = 3, pady = 3)
+
+    markup_label = tk.Label(labelframe, text = "markup = $" + dictofcomponents.get("markup"), font = ("arial", 12))
+    markup_label.pack(row = 1, column = 0, padx = 3, pady = 3)
+
+    discount_label = tk.Label(labelframe, text = "discount = $" + dictofcomponents.get("discount"), font = ("arial", 12))
+    discount_label.pack(row = 1, column = 1, padx = 3, pady = 3)
+    
+    if profitloss == "profit":
+        profit_label = tk.Label(labelframe, text = "profit = $" + dictofcomponents.get("profit"), font = ("arial", 12))
+        profit_label.pack(row = 1, column = 2, padx = 3, pady = 3)
+    elif profitloss == "loss":
+        loss_label = tk.Label(labelframe, text = "loss = $" + dictofcomponents.get("loss"), font = ("arial", 12))
+        loss_label.pack(row = 1, column = 2, padx = 3, pady = 3)
+
+    markupperc_label = tk.Label(labelframe, text = "markup% = " + dictofcomponents.get("markup%"), font = ("arial", 12))
+    markupperc_label.pack(row = 2, column = 0, padx = 3, pady = 3)
+
+    discountperc_label = tk.Label(labelframe, text = "discount = $" + dictofcomponents.get("discount%"), font = ("arial", 12))
+    discountperc_label.pack(row = 2, column = 1, padx = 3, pady = 3)
+    
+    if profitloss == "profit":
+        profitperc_label = tk.Label(labelframe, text = "profit% = " + dictofcomponents.get("profit%"), font = ("arial", 12))
+        profitperc_label.pack(row = 2, column = 2, padx = 3, pady = 3)
+    elif profitloss == "loss":
+        lossperc_label = tk.Label(labelframe, text = "loss% = " + dictofcomponents.get("loss%"), font = ("arial", 12))
+        lossperc_label.pack(row = 2, column = 2, padx = 3, pady = 3)
+
+    root.mainloop()
+
+showresults()
