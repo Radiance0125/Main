@@ -158,12 +158,7 @@ def calculate():
             if calculation[i] == "÷":
                 result /= group(i+1)
 
-    try:
-        int(result)
-    except:
-        print("= " + str(result))
-    else:
-        print("= " + str(int(result)))
+    print("= " + str(result))
 
 calculate()
 
