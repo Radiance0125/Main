@@ -1,5 +1,7 @@
 import tkinter as tk 
 
+result = None
+
 formula = "didn't change"
 
 def keypad():
@@ -93,9 +95,10 @@ def keypad():
 
 keypad()
 print(formula)
-def calculate():
 
-    calculation = [i for i in formula]
+calculation = [i for i in formula]
+
+def check():
 
     if calculation[0] == "+" or calculation[0] == "-" or calculation[0] == "÷" or calculation[0] == "x":
         print("input error")
@@ -115,51 +118,68 @@ def calculate():
                 print("input error")
                 exit()
 
-    precal = 0
-    initial = ""
-    result = 0
+def group():
+    global calculation
+    newcalc = []
 
-    x = 0
-
-    while True:
+    insertvar = ""
+    for i in range(len(calculation)):
         try:
-            int(calculation[x])
+            int(calculation[i])
         except:
-            break
+            newcalc.append(calculation[i])
         else:
-            initial += calculation[x]
-            precal += 1
-            x += 1
-    result += int(initial)
-
-    def group(index):
-        number = ""
-        while True:
+            insertvar += calculation[i]
             try:
-                int(calculation[index])
+                int(calculation[i+1])
             except:
-                return int(number)
-            else:
-                number += calculation[index]
-                index += 1
+                newcalc.append(insertvar)
+                insertvar = ""
+    calculation = newcalc
 
-    skip = False
-    for i in range(precal, len(calculation)-1):
-        if skip == True:
-            skip = False
-        else:
-            skip = True
-            if calculation[i] == "+":
-                result += group(i+1)
-            if calculation[i] == "-":
-                result -= group(i+1)
-            if calculation[i] == "x":
-                result *= group(i+1)
-            if calculation[i] == "÷":
-                result /= group(i+1)
+def calculate1():
+    global calculation
+    newcalc = []
+    next = 0
 
-    print("= " + str(result))
+    for i in range(len(calculation)-1):
+        if next > 0:
+            next -= 1
+            break
+        if calculation[i+1] == "x":
+            newcalc.append(str(int(calculation[i]*int(calculation[i+2]))))
+            next += 2
+        if calculation[i+1] == "÷":
+            newcalc.append(str(int(calculation[i]/int(calculation[i+2]))))
+            next -= 2
+        
+    calculation = newcalc
 
-calculate()
+def calculate2():
+    global result
+    result = int(calculation[0])
+
+    calculation.remove(0)
+
+    next = False
+
+    for i in range(len(calculation)-1):
+        if next == True:
+            next = False
+            break
+        if calculation[i] == "+":
+            result += calculation[i+1]
+            next = True
+        if calculation[i+1] == "-":
+            result -= calculation[i+1]
+            next = True
+check()
+group()
+calculate1()
+calculate2()
+
+
+print(result)
+
 
 #÷
