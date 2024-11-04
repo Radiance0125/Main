@@ -139,27 +139,44 @@ def group():
 
 def calculate1():
     global calculation
+
+    tempcalc = calculation
     newcalc = []
     next = 0
 
-    for i in range(len(calculation)-1):
+    newcalc.append(tempcalc[0])
+    tempcalc.pop(0)
+
+    for i in range(len(tempcalc)):
         if next > 0:
             next -= 1
-            break
-        if calculation[i+1] == "x":
-            newcalc.append(str(int(calculation[i]*int(calculation[i+2]))))
-            next += 2
-        if calculation[i+1] == "÷":
-            newcalc.append(str(int(calculation[i]/int(calculation[i+2]))))
-            next -= 2
-        
+        elif tempcalc[i] == "+":
+            newcalc.append(tempcalc[i])
+
+        elif tempcalc[i] == "-":
+            newcalc.append(tempcalc[i])
+
+        elif i <= (len(tempcalc)-3):
+
+            if tempcalc[i+1] == "x":
+                newcalc.append(str(int(tempcalc[i])*int(tempcalc[i+2])))
+                next = 2
+
+            if tempcalc[i+1] == "÷":
+                newcalc.append(str(int(tempcalc[i])/int(tempcalc[i+2])))
+                next = 2
+
+
+        else:
+            newcalc.append(tempcalc[i])
+    
     calculation = newcalc
 
 def calculate2():
     global result
     result = int(calculation[0])
 
-    calculation.remove(0)
+    calculation.pop(-1)
 
     next = False
 
@@ -174,11 +191,12 @@ def calculate2():
             result -= calculation[i+1]
             next = True
 check()
+print(calculation)
 group()
+print(calculation)
 calculate1()
+print(calculation)
 calculate2()
-
-
 print(result)
 
 
