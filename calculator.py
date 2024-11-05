@@ -107,13 +107,13 @@ def check():
     for i in range(len(calculation)):
         if calculation[i] == "+" or calculation[i] == "-" or calculation[i] == "÷" or calculation[i] == "x":
             try:
-                int(calculation[i-1])
+                int(float(calculation[i-1]))
             except:
                 print("input error")
                 exit()
 
             try:
-                int(calculation[i+1])
+                int(float(calculation[i+1]))
             except:
                 print("input error")
                 exit()
@@ -125,77 +125,81 @@ def group():
     insertvar = ""
     for i in range(len(calculation)):
         try:
-            int(calculation[i])
+            int(float(calculation[i]))
         except:
             newcalc.append(calculation[i])
         else:
             insertvar += calculation[i]
             try:
-                int(calculation[i+1])
+                int(float(calculation[i+1]))
             except:
                 newcalc.append(insertvar)
                 insertvar = ""
     calculation = newcalc
 
 def calculate1():
+    print("calc1")
     global calculation
 
     tempcalc = calculation
     newcalc = []
     next = 0
 
-    newcalc.append(tempcalc[0])
-    tempcalc.pop(0)
+    print(tempcalc)
+    if tempcalc[1] == "+" or  tempcalc[1] == "-":
+        newcalc.append(tempcalc[0])
+        tempcalc.pop(0)
+    print(tempcalc)
 
     for i in range(len(tempcalc)):
+        print("this time it's" + tempcalc[i])
         if next > 0:
+            print("skipped" + tempcalc[i])
             next -= 1
         elif tempcalc[i] == "+":
             newcalc.append(tempcalc[i])
-
         elif tempcalc[i] == "-":
             newcalc.append(tempcalc[i])
-
-        elif i <= (len(tempcalc)-3):
-
+        elif i < len(tempcalc)-2:
             if tempcalc[i+1] == "x":
-                newcalc.append(str(int(tempcalc[i])*int(tempcalc[i+2])))
+                newcalc.append(str(int(float(tempcalc[i])*int(float(tempcalc[i+2])))))
                 next = 2
-
             if tempcalc[i+1] == "÷":
-                newcalc.append(str(int(tempcalc[i])/int(tempcalc[i+2])))
+                newcalc.append(str(int(float(tempcalc[i])/int(float(tempcalc[i+2])))))
                 next = 2
-
-
         else:
             newcalc.append(tempcalc[i])
     
     calculation = newcalc
+    if "x" in calculation or "÷" in calculation:
+        calculate1()
 
 def calculate2():
+    print("calc2")
     global result
-    result = int(calculation[0])
 
-    calculation.pop(-1)
+    result = int(float(calculation[0]))
+    print(calculation)
+    calculation.pop(0)
 
-    next = False
+    operation = ""
+    print(calculation)
 
-    for i in range(len(calculation)-1):
-        if next == True:
-            next = False
-            break
-        if calculation[i] == "+":
-            result += calculation[i+1]
-            next = True
-        if calculation[i+1] == "-":
-            result -= calculation[i+1]
-            next = True
+    for i in range(len(calculation)):
+        if operation == "+":
+            result += int(float(calculation[i]))
+            operation = ""
+        elif operation == "-":
+            result -= int(float(calculation[i]))
+            operation = ""
+        elif calculation[i] == "+":
+            operation = "+"
+        else:
+            operation = "-"
+
 check()
-print(calculation)
 group()
-print(calculation)
 calculate1()
-print(calculation)
 calculate2()
 print(result)
 
