@@ -95,6 +95,8 @@ def keypad():
 
 keypad()
 print(formula)
+if formula == "didn't change":
+    exit()
 
 calculation = [i for i in formula]
 
@@ -145,39 +147,51 @@ def calculate1():
     newcalc = []
     next = 0
 
+    x3 = False
+    extra = False
+
     print(tempcalc)
     if tempcalc[1] == "+" or  tempcalc[1] == "-":
         newcalc.append(tempcalc[0])
         tempcalc.pop(0)
+    else:
+        x3 = True
     print(tempcalc)
 
+    extracalc = tempcalc.copy()
+
     for i in range(len(tempcalc)):
-        print("this time it's " + tempcalc[i])
+        print(f"operating on {tempcalc[i]}")
+        extracalc.pop(0)
         if next > 0:
             print("skipped " + tempcalc[i])
         elif tempcalc[i] == "+":
-            newcalc.append(tempcalc[i])
+            newcalc.append("+")
         elif tempcalc[i] == "-":
-            newcalc.append(tempcalc[i])
+            newcalc.append("-")
         elif i < len(tempcalc)-2:
+            print("checked")
             if tempcalc[i+1] == "x":
                 newcalc.append(str(int(float(tempcalc[i])*int(float(tempcalc[i+2])))))
-                tempcalc.pop(0)
-                tempcalc.pop(0)
                 next = 2
+                extra = True
+                extracalc = extracalc[2:]
                 break
             if tempcalc[i+1] == "÷":
                 newcalc.append(str(int(float(tempcalc[i])/int(float(tempcalc[i+2])))))
-                tempcalc.pop(0)
-                tempcalc.pop(0)
                 next = 2
+                extra = True
+                extracalc = extracalc[2:]
                 break
         else:
             newcalc.append(tempcalc[i])
-    
-    for i in newcalc:
-        calculation.append(i)
+        print(f"newcalc = {newcalc}")
+
     calculation = newcalc
+    print(f"extracalc = {extracalc}")
+    if extra == True:
+        for i in extracalc:
+            calculation.append(i)
     if "x" in calculation or "÷" in calculation:
         calculate1()
 

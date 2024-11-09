@@ -93,10 +93,17 @@ def keypad():
 
     root.mainloop()
 
-keypad()
-print(formula)
-
-calculation = [i for i in formula]
+def calculate():
+    x = ""
+    for i in calculation:
+        if i == "x":
+            x += "*"
+        elif i == "÷":
+            x += "/"
+        else:
+            x += i
+        
+    print(eval(x))
 
 def check():
 
@@ -118,90 +125,10 @@ def check():
                 print("input error")
                 exit()
 
-def group():
-    global calculation
-    newcalc = []
 
-    insertvar = ""
-    for i in range(len(calculation)):
-        try:
-            int(float(calculation[i]))
-        except:
-            newcalc.append(calculation[i])
-        else:
-            insertvar += calculation[i]
-            try:
-                int(float(calculation[i+1]))
-            except:
-                newcalc.append(insertvar)
-                insertvar = ""
-    calculation = newcalc
-
-def calculate1():
-    print("calc1")
-    global calculation
-
-    tempcalc = calculation
-    newcalc = []
-    next = 0
-
-    print(tempcalc)
-    if tempcalc[1] == "+" or  tempcalc[1] == "-":
-        newcalc.append(tempcalc[0])
-        tempcalc.pop(0)
-    print(tempcalc)
-
-    for i in range(len(tempcalc)):
-        print("this time it's" + tempcalc[i])
-        if next > 0:
-            print("skipped" + tempcalc[i])
-            next -= 1
-        elif tempcalc[i] == "+":
-            newcalc.append(tempcalc[i])
-        elif tempcalc[i] == "-":
-            newcalc.append(tempcalc[i])
-        elif i < len(tempcalc)-2:
-            if tempcalc[i+1] == "x":
-                newcalc.append(str(int(float(tempcalc[i])*int(float(tempcalc[i+2])))))
-                next = 2
-            if tempcalc[i+1] == "÷":
-                newcalc.append(str(int(float(tempcalc[i])/int(float(tempcalc[i+2])))))
-                next = 2
-        else:
-            newcalc.append(tempcalc[i])
-    
-    calculation = newcalc
-    if "x" in calculation or "÷" in calculation:
-        calculate1()
-
-def calculate2():
-    print("calc2")
-    global result
-
-    result = int(float(calculation[0]))
-    print(calculation)
-    calculation.pop(0)
-
-    operation = ""
-    print(calculation)
-
-    for i in range(len(calculation)):
-        if operation == "+":
-            result += int(float(calculation[i]))
-            operation = ""
-        elif operation == "-":
-            result -= int(float(calculation[i]))
-            operation = ""
-        elif calculation[i] == "+":
-            operation = "+"
-        else:
-            operation = "-"
-
+keypad()
+calculation = [i for i in formula]
 check()
-group()
-calculate1()
-calculate2()
-print(result)
 
-
-#÷
+print(formula)
+calculate()
