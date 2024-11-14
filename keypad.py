@@ -73,3 +73,5 @@ def keypad():
     buttonframe.pack(fill = "x")
 
     root.mainloop()
+
+keypad()
