@@ -2,13 +2,7 @@ import tkinter as tk
 import random
 import time
 
-for i in range(4):
-    code.append(str(random.randint(0, 9)))
-
-for i in code:
-    occurrences[i] += 1
-
-occurrences_copy = occurrences.copy()
+code = []
 
 def lose():
     global code
@@ -77,6 +71,8 @@ def main():
     
     occurrences_copy = occurrences.copy()
 
+    print(code)
+
 
     root = tk.Tk()
     root.title("game")
@@ -95,11 +91,11 @@ def main():
     records.insert(tk.END, "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.")
     records.configure(state="disabled")
 
-    for i in range(1, 10):
-        slots.append(canvas.create_oval(25, i*20, 35, i*20+10, fill = "white"))
-        slots.append(canvas.create_oval(55, i*20, 65, i*20+10, fill = "white"))
-        slots.append(canvas.create_oval(85, i*20, 95, i*20+10, fill = "white"))
-        slots.append(canvas.create_oval(115, i*20, 125, i*20+10, fill = "white"))
+    for i in range(1, 11):
+        slots.append(canvas.create_oval(25, i*19-3, 35, i*19+7, fill = "white"))
+        slots.append(canvas.create_oval(55, i*19-3, 65, i*19+7, fill = "white"))
+        slots.append(canvas.create_oval(85, i*19-3, 95, i*19+7, fill = "white"))
+        slots.append(canvas.create_oval(115, i*19-3, 125, i*19+7, fill = "white"))
 
 
     def add_to_display(value):
@@ -122,39 +118,39 @@ def main():
         global nextslot
         canvas.itemconfig(slots[nextslot], fill=color)
         nextslot += 1
-        
-    def check(position, attempt_list):
-        global occurrences
-        digit = attempt_list[position]
-
-        for i in range(position + 1, 3):
-                if code[i] == digit and code[i] == attempt_list[i]:
-                    occurrences[digit] -= 1
-        if occurrences[digit] == 0:
-            occurrences = occurrences_copy.copy()
-            return False
-        else:
-            occurrences = occurrences_copy.copy()
-            return True
-
-
 
     def submit_code():
-        global nextslot, occurrences, occurrences_copy, chances, history
-
-        occurrences = occurrences_copy.copy()
-        
+                
         feedback["green"] = 0
         feedback["yellow"] = 0
         feedback["red"] = 0
+    
+        global nextslot, chances, history
 
         attempt_num = display.get()
+        if not attempt_num.isdigit() or len(attempt_num) != 4:
+            return
+
+        attempt_list = [str(i) for i in attempt_num]
+        digit_counts = occurrences.copy()
+        
+        for i in range(4):
+            if attempt_list[i] == code[i]:
+                feedback["green"] += 1
+                digit_counts[attempt_list[i]] -= 1
+        
+        for i in range(4):
+            if attempt_list[i] != code[i] and attempt_list[i] in code:
+                if digit_counts[attempt_list[i]] > 0:
+                    feedback["yellow"] += 1
+                    digit_counts[attempt_list[i]] -= 1
+                else:
+                    feedback["red"] += 1
+            elif attempt_list[i] != code[i]:
+                feedback["red"] += 1
 
         x = 11 - chances
-
         
-        attempt_list = [str(i) for i in attempt_num]
-
         if attempt_list == code:
             root.destroy()
             win()
@@ -166,18 +162,6 @@ def main():
 
             history[f"{x}"] = attempt_num        
             add_to_history()
-
-            for i in range(4):
-                if attempt_list[i] == code[i]:
-                    feedback["green"] += 1
-                    occurrences[attempt_list[i]] -= 1
-                    occurrences_copy[attempt_list[i]] -= 1
-
-                elif attempt_list[i] in code and check(i, attempt_list) == True:
-                    feedback["yellow"] += 1
-                    
-                else:
-                    feedback["red"] += 1
 
             for i in ("green", "yellow", "red"):
                 for j in range(feedback[i]):
@@ -242,5 +226,5 @@ def main():
     
     root.mainloop()
 
-print(code)
+
 main()
