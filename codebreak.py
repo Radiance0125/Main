@@ -2,9 +2,13 @@ import tkinter as tk
 import random
 import time
 
+record = ""
+
 code = []
 
-def lose():
+tries = 0
+
+def lose(tries):
     global code
 
     root = tk.Tk()
@@ -19,7 +23,13 @@ def lose():
     def quit():
         exit()
 
-    tk.Message(root, text = "you lost!", font = ("arial", 20), background = "firebrick2").place(x = 200, y = 100, anchor = tk.CENTER)
+    x = ""
+    for i in code:
+        x += i
+
+    tk.Message(root, text = "you lost!", font = ("arial", 20), background = "firebrick2").place(x = 200, y = 75, anchor = tk.CENTER)
+    tk.Message(root, text = f"the code was {x}", font = ("arial", 10), background = "firebrick2", width = 200).place(x = 200, y = 115, anchor = tk.CENTER)
+    tk.Message(root, text = record, font = ("arial", 10), background = "firebrick2", width = 70).place(x = 37, y = 14, anchor = tk.CENTER)
     tk.Button(root, text = "retry", font = ('arial', 14,), activebackground = "RoyalBlue1", bg = "RoyalBlue1", width = 7, 
               command = retry).place(x = 135, y = 160, anchor = tk.CENTER)
     tk.Button(root, text = "quit", font = ('arial', 14,), activebackground = "orange", bg = "orange", width = 7, 
@@ -28,12 +38,15 @@ def lose():
     root.mainloop()
 
 def win():
-    global code
+    global code, record
 
     root = tk.Tk()
     root.title("game")
     root.geometry("400x250")
     root.config(background = "lawn green")
+
+    if record == "" or int(record)>tries:
+        record = f"record: {tries} attempts"
 
     def retry():
         root.destroy()
@@ -43,6 +56,7 @@ def win():
         exit()
 
     tk.Message(root, text = "you won!", font = ("arial", 20), background = "lawn green").place(x = 200, y = 100, anchor = tk.CENTER)
+    tk.Message(root, text = record, font = ("arial", 10), background = "lawn green", width = 70).place(x = 37, y = 14, anchor = tk.CENTER)
     tk.Button(root, text = "retry", font = ('arial', 14,), activebackground = "RoyalBlue1", bg = "RoyalBlue1", width = 7, 
               command = retry).place(x = 135, y = 160, anchor = tk.CENTER)
     tk.Button(root, text = "quit", font = ('arial', 14,), activebackground = "orange", bg = "orange", width = 7, 
@@ -53,7 +67,9 @@ def win():
 
 def main():
 
-    global code, slots, nextslot, occurrences, occurrences_copy, chances, history, feedback
+    global code, slots, nextslot, occurrences, occurrences_copy, chances, history, feedback, tries
+
+    tries = 0
     
     code = []
     slots = []
@@ -64,15 +80,15 @@ def main():
     history = {str(i): "" for i in range(1, 11)}
     
     for i in range(4):
-        code.append(str(random.randint(0, 9)))
+        x = ""
+        while not x.isdigit() or x in code:
+            x = str(random.randint(0,9))
+        code.append(x)
     
     for i in code:
         occurrences[i] += 1
     
     occurrences_copy = occurrences.copy()
-
-    print(code)
-
 
     root = tk.Tk()
     root.title("game")
@@ -120,16 +136,23 @@ def main():
         nextslot += 1
 
     def submit_code():
+
+        global tries
                 
         feedback["green"] = 0
         feedback["yellow"] = 0
         feedback["red"] = 0
     
         global nextslot, chances, history
-
         attempt_num = display.get()
+
         if not attempt_num.isdigit() or len(attempt_num) != 4:
+            display.configure(state="normal")
+            display.delete(0, tk.END)
+            display.configure(state="readonly")
             return
+        else:
+            tries += 1
 
         attempt_list = [str(i) for i in attempt_num]
         digit_counts = occurrences.copy()
@@ -152,8 +175,8 @@ def main():
         x = 11 - chances
         
         if attempt_list == code:
-            root.destroy()
-            win()
+            #root.destroy()
+            win(tries)
 
         if len(attempt_list) != 4:
             print("response invalid")
@@ -172,8 +195,8 @@ def main():
         display.configure(state="readonly")
 
         if chances == 0:
-            root.destroy()
-            lose()
+            #root.destroy()
+            lose(tries)
 
 
     display = tk.Entry(root, font = ("arial", 20), state = "readonly")
