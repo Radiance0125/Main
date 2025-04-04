@@ -37,7 +37,7 @@ def lose(tries):
 
     root.mainloop()
 
-def win():
+def win(tries):
     global code, record
 
     root = tk.Tk()
@@ -79,11 +79,13 @@ def main():
     occurrences = {str(i): 0 for i in range(10)}
     history = {str(i): "" for i in range(1, 11)}
     
-    for i in range(4):
+    while len(code) != 4:
         x = ""
-        while not x.isdigit() or x in code:
+        while not x.isdigit() or  x in code:
             x = str(random.randint(0,9))
         code.append(x)
+
+    print (code)
     
     for i in code:
         occurrences[i] += 1
