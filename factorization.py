@@ -4,10 +4,12 @@ factors = []
 
 prime = 2
 
+
 if number.isdigit() == False:
     print("input error")
     exit()
 
+    
 def findprime():
     global prime
     prime += 1

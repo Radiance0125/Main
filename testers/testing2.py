@@ -1,8 +1,8 @@
-import matplotlib.pyplot as plt  # Visualize fit
+import matplotlib.pyplot as plt  # visualize fit
 import numpy as np
 
-wl = np.array([280, 300, 320, 334, 340, 360])  # Example digitized
-A_raw = np.array([0.1, 0.3, 0.8, 1.0, 0.85, 0.2])  # Normalized
+wl = np.array([280, 300, 320, 334, 340, 360])  # example digitized
+A_raw = np.array([0.1, 0.3, 0.8, 1.0, 0.85, 0.2])  # normalized
 plt.plot(wl, A_raw, 'o', label='Experimental')
 
 
@@ -13,3 +13,5 @@ def gaussian(x, amp, cen, wid):
 popt, _ = curve_fit(gaussian, wl, A_raw, p0=[1, 334, 12])
 A_fit = gaussian(wl, *popt)
 plt.plot(wl, A_fit, '-', label=f'Fit: λ_max={popt[1]:.1f} nm')
+
+plt.show()
