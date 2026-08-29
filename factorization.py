@@ -1,15 +1,17 @@
-number = int(input(f"what is the number you wish to have factorized?\n"))
+number = input(f"what is the number you wish to have factorized?\n")
 
 factors = []
 
 prime = 2
 
 
-if not isinstance(number, int):
-    print("input error")
+try:
+    number = int(number)
+except ValueError:
+    print("Please enter a valid integer.")
     exit()
 
-    
+
 def findprime():
     global prime
     prime += 1
