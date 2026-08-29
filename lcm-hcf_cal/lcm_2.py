@@ -13,8 +13,8 @@ def compute_lcm(x, y):
 
    return lcm
 
-num1 = int(input("input the first number"))
-num2 = int(input("input the second number"))
+num1 = int(input(f"input the first number:\n"))
+num2 = int(input(f"input the second number:\n"))
 calculate = True
 
 if ((num1 == 0) or (num2 == 0)):

@@ -16,9 +16,9 @@ def compute_lcm(x, y, z):
 
    return lcm
 
-num1 = int(input("input the first number"))
-num2 = int(input("input the second number"))
-num3 = int(input("input the third number"))
+num1 = int(input(f"input the first number:\n"))
+num2 = int(input(f"input the second number:\n"))
+num3 = int(input(f"input the third number:\n"))
 calculate = True
 
 if ((num1 == 0) or (num2 == 0) or (num3 == 0)):
