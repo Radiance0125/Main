@@ -5,7 +5,7 @@ factors = []
 prime = 2
 
 
-if number.isdigit() == False:
+if not isinstance(number, int):
     print("input error")
     exit()
 
